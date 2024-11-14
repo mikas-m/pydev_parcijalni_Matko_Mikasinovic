@@ -62,17 +62,19 @@ def manage_customers(customers):
             name = input(f"Unesi ime / naziv kupca: ").strip()
             email = input(f"Unesi e-mail kupca: ").strip()
             vat_id = input(f"Unesi porezni ID kupca: ")
+            while len(vat_id) != 10 or not vat_id.isdigit():
+                print(f"Ili je broj znamenki netočan ili je upisan nedopušten znak. Probaj opet")
+                vat_id = input(f"Unesi porezni ID kupca: ")
             novi_kupac = {
                 'name' : name,
                 'email' : email,
                 'vat_id' : vat_id
             }
             customers.append(novi_kupac)
-            print(f"Dodan novi kupac:\n"
-                  f"Ime -> {customers[name]}\n"
-                  f"e-mail -> {customers[email]}\n"
-                  f"vat-id -> {customers[vat_id]}")
-            odabir_2 = input(f"Želiš li dodati još jednog kupca? da/ne")
+            print(f"Ime / naziv kupca -> {novi_kupac['name']}\n"
+                  f"E-mail -> {novi_kupac['email']}\n"
+                  f"Porezni ID -> {novi_kupac['vat_id']}")
+            odabir_2 = input(f"Želiš li dodati još jednog kupca? (da/ne): ")
             if odabir_2.lower() != 'da':
                 break
         
@@ -81,7 +83,8 @@ def manage_customers(customers):
             for customer in customers:
                 print(f"Ime / naziv kupca -> {customer['name']}\n"
                       f"E-mail -> {customer['email']}\n"
-                      f"Porezni ID -> {customer['vat_id']}")
+                      f"Porezni ID -> {customer['vat_id']}\n"
+                      f"-----------------------------------")
         except Exception as e:
             print(f"Greška -> {e}")
     else:
