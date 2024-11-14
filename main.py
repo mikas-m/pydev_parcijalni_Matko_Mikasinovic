@@ -35,7 +35,7 @@ def create_new_offer(offers, products, customers):
     # Omogućite unos kupca
     # Izračunajte sub_total, tax i total
     # Dodajte novu ponudu u listu offers
-    pass
+    
 
 
 # TODO: Implementirajte funkciju za upravljanje proizvodima.
@@ -57,30 +57,31 @@ def manage_customers(customers):
     # Za dodavanje: omogući unos imena kupca, emaila i unos VAT ID-a
     # Za pregled: prikaži listu svih kupaca
     odabir = input("Želiš li dodati novog kupca (1) ili vidjeti postojeće (2)? ")
-    while odabir == '1':
-        name = input(f"Unesi ime / naziv kupca: ").strip()
-        email = input(f"Unesi e-mail kupca: ").strip()
-        vat_id = input(f"Unesi porezni ID kupca: ")
-        novi_kupac = {
-            'name' : name,
-            'email' : email,
-            'vat_id' : vat_id
-        }
-        customers.append(novi_kupac)
-        print(f"Dodan novi kupac:\n"
-              f"Ime -> {name}\n"
-              f"e-mail -> {email}\n"
-              f"vat-id -> {vat_id}")
-        odabir_2 = input(f"Želiš li dodati još jednog kupca? da/ne")
-        if odabir_2.lower() != 'da':
-            break
-    
-    if odabir == '2':
+    if odabir == '1':
+        while True:
+            name = input(f"Unesi ime / naziv kupca: ").strip()
+            email = input(f"Unesi e-mail kupca: ").strip()
+            vat_id = input(f"Unesi porezni ID kupca: ")
+            novi_kupac = {
+                'name' : name,
+                'email' : email,
+                'vat_id' : vat_id
+            }
+            customers.append(novi_kupac)
+            print(f"Dodan novi kupac:\n"
+                  f"Ime -> {customers[name]}\n"
+                  f"e-mail -> {customers[email]}\n"
+                  f"vat-id -> {customers[vat_id]}")
+            odabir_2 = input(f"Želiš li dodati još jednog kupca? da/ne")
+            if odabir_2.lower() != 'da':
+                break
+        
+    elif odabir == '2':
         try:
             for customer in customers:
-                print(f"Ime / naziv kupca -> {customer[name]}\n"
-                      f"E-mail -> {customer[email]}\n"
-                      f"Porezni ID -> {customer[vat_id]}")
+                print(f"Ime / naziv kupca -> {customer['name']}\n"
+                      f"E-mail -> {customer['email']}\n"
+                      f"Porezni ID -> {customer['vat_id']}")
         except Exception as e:
             print(f"Greška -> {e}")
     else:
