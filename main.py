@@ -35,6 +35,38 @@ def create_new_offer(offers, products, customers):
     # Omogućite unos kupca
     # Izračunajte sub_total, tax i total
     # Dodajte novu ponudu u listu offers
+    print(f"Lista kupca ->")
+    try:
+        for customer in customers:
+            print(f"Ime / naziv kupca -> {customer['name']}\n"
+            f"E-mail -> {customer['email']}\n"
+            f"Porezni ID -> {customer['vat_id']}\n"
+            f"-----------------------------------")
+    except Exception as e:
+        print(f"Greška -> {e}")
+    finally:
+        customer_selected = input(f"Unesite ime / naziv kupca: ")
+    date = date.today()
+    print(f"Današnji datum -> {date}")
+    try:
+        for product in products:
+            print(f"ID -> {product['id']}\n"
+                  f"Naziv proizvoda -> {product['name']}\n"
+                  f"Opis proizvoda -> {product['description']}\n"
+                  f"Cijena -> {product['price']}\n"
+                  f"-----------------------------------")
+    except Exception as e:
+        print(f"Greška -> {e}")
+    finally:
+        product_selected = input(f"Unesite ID proizvoda: ")
+    if product_selected == product['id']:
+        print(product['price']
+                  
+                  
+                  
+    
+    product = input(f"Unesite naziv proizvoda: ")
+    sub_total = input(f"Unesi 
     
 
 
