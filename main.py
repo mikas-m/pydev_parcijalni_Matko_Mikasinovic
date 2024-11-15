@@ -40,9 +40,29 @@ def create_new_offer(offers, products, customers):
     ids_offer = [offer['offer_number'] for offer in offers]
 
     while True:
-        offer_number = max(ids_offer) + 1
-        customer = input(f"Unesite ime / naziv kupca: ")
-        print(f"Današnji datum -> {date.today()}")
+        offer_number = int(max(ids_offer)) + 1
+        name = input(f"Unesite ime / naziv kupca: ")
+        email = input(f"Unesi e-mail kupca: ").strip()
+        vat_id = input(f"Unesi porezni ID kupca: ")
+        while len(vat_id) != 10 or not vat_id.isdigit():
+                print(f"Ili je broj znamenki netočan ili je upisan nedopušten znak. Probaj opet")
+                vat_id = input(f"Unesi porezni ID kupca: ")
+        date_now = (date.today()).strftime('%Y-%m-%d')
+        new_customer = {
+            'name' : name,
+            'email' : email,
+            'vat_id' : vat_id
+        }
+
+        customers.append(new_customer)
+
+        new_offer = {
+            'offer_number' : offer_number,
+            'customer' : name,
+            'date' : date_now,
+            'items': []
+        }
+
         print(f"-------------------------------\n"
               f"LISTA PROIZVODA: ||\n"
               f"-----------------ˇˇ------------")
@@ -52,27 +72,55 @@ def create_new_offer(offers, products, customers):
                   f"Opis proizvoda -> {product['description']}\n"
                   f"Cijena proizvoda -> {product['price']}\n"
                   f"-----------------------------------------")
-            
-        product_id_offer = input(f"Unesite ID proizvoda za kupiti (ako ih je više, odvoji ih zarezom): ")
-        product_ids = [id for id in product_id_offer.split(',')]
-        product_ids.append(product_id_offer)
-
+        
+        product_id_input = input(f"Unesite ID proizvoda za kupiti (ako ih je više, odvoji ih zarezom): ")
+        product_ids = [id.strip() for id in product_id_input.split(',')]  # Strip to remove any spaces
+        sub_total = 0
 
         if len(product_ids) > 1:
-            id for id in product_ids_offer.split(','):
-                if id in product_ids:
-                    offer_item_id = 
+            for id in product_ids:
+                for product in products:
+                    if int(id) == product['id']:
+                        new_item = product.copy()
+                        new_item['quantity'] = int(input(f"Koliku količinu proizvoda {id} trebaš? "))
+                        new_item['item_total'] = new_item['quantity'] * product['price']
+                        
+                        new_offer['items'].append(new_item)
+                        
+                        sub_total += new_item['item_total']
+                        break
                 else:
                     print(f"Proizvod s ID -> {id} ne postoji")
-                    
-            print(product_ids)
         elif len(product_ids) == 1:
-            product_id = product_ids[0]
-            print(product_id)
+            for product in products:
+                if int(product_ids[0]) == product['id']:
+                    new_item = product.copy()
+                    new_item['quantity'] = int(input(f"Koliku količinu navedenog proizvoda trebaš? "))
+                    new_item['item_total'] = new_item['quantity'] * product['price']
+                    
+                    new_offer['items'].append(new_item)
+                    
+                    sub_total += new_item['item_total']
+                    break
+            else:
+                print(f"Proizvod s ID -> {product_ids[0]} ne postoji")
         else:
-            odabir2 = input(f"Nisi odabrao niti jednu ponudu. Želiš li nastaviti sa stvaranjem ponude? da/ne ")
-            if odabir2.lower != 'da':
-                break             
+            kraj = input(f"Nisi odabrao niti jednu ponudu. Želiš li nastaviti sa stvaranjem ponude? da/ne ")
+            if kraj.lower() != 'da':
+                break
+
+        new_offer['sub_total'] = sub_total
+        new_offer['tax'] = new_offer['sub_total'] * 0.1
+        new_offer['total'] = new_offer['sub_total'] + new_offer['tax']
+
+        offers.append(new_offer)
+
+        kraj = input(f"Dodajemo još ponuda? da/ne ")
+        if kraj.lower() != 'da':
+            break
+        
+
+
 
 
 # TODO: Implementirajte funkciju za upravljanje proizvodima.
@@ -110,7 +158,7 @@ def manage_products(products):
                 f"Naziv proizvoda -> {name}\n"
                 f"Opis proizvoda -> {description}\n"
                 f"Cijena -> {price}")
-            pitanje_za_opet("Želiš li dodati još jedan proizvod? (da/ne): ")
+
            
 
 
@@ -138,7 +186,6 @@ def manage_products(products):
                 'price' : price
             }
             
-            product.update(ponuda)
 
 
 
@@ -167,7 +214,7 @@ def manage_customers(customers):
             print(f"Ime / naziv kupca -> {novi_kupac['name']}\n"
                   f"E-mail -> {novi_kupac['email']}\n"
                   f"Porezni ID -> {novi_kupac['vat_id']}")
-            pitanje_za_opet()
+
         
     elif odabir == '2':
         try:
@@ -190,32 +237,22 @@ def display_offers(offers):
     # Omogućite izbor pregleda: sve ponude, po mjesecu ili pojedinačna ponuda
     # Prikaz relevantnih ponuda na temelju izbora
     
-    odabir = input(f"Želiš li vidjeti ponude po mjesecu (1), pojedinačnu ponudu (2) ili sve ponude (3)? "
+    odabir = input(f"Želiš li vidjeti ponude po mjesecu (1), pojedinačnu ponudu (2) ili sve ponude (3)? ")
     if odabir == '1':
         pass
     if odabir == '2':
-        odabir_id = input(f"Odaberi ID ponude koju želiš prikazati? ")
-        while True:
-        for offer in offers:
-            if odabir_id == offer['offer_number']:
-                print(offer)
-            pitanje_za_opet()
+        pass
             
     if odabir == '3':
         for offer in offers:
-            print(f"Ponuda broj -> {offer['offer_number']}\n"
-                  f"Kupac -> {offer['customer']}\n"
-                  f"Datum -> {offer['date']}\n"
-                  f"Broj stavki -> len{offer['item']}\n"
-                  f"Stavke:")
-
-            for item in offer:
-                print(f"ID proizvoda -> {item[product_id]}\n"
-                      f"Naziv proizvoda -> {item[product_name]}\n"
-                      f"Opis proizvoda -> {item[description]}\n"
-                      f"Cijena -> {item[price]}\n"
-                      f"Količina -> {item['quantity']}\n"
-                      f"Ukupna cijena -> {item['item_total']}\n"
+            print(f"----------------------------------------------------------------------------------------------")
+            print(f"Ponuda br: {offer['offer_number']}, Kupac: {offer['customer']}, Datum ponude: {offer['date']}")
+            print("Stavke:")
+            for item in offer["items"]:
+                print(f"  - {item['product_name']} (ID: {item['product_id']}): {item['description']}")
+                print(f"    Kolicina: {item['quantity']}, Cijena: ${item['price']}, Ukupno: ${item['item_total']}")
+            print(f"Ukupno: ${offer['sub_total']}, Porez: ${offer['tax']}, Ukupno za platiti: ${offer['total']}")
+            print(f"----------------------------------------------------------------------------------------------")
             
     
 
@@ -229,11 +266,6 @@ def print_offer(offer):
         print(f"  - {item['product_name']} (ID: {item['product_id']}): {item['description']}")
         print(f"    Kolicina: {item['quantity']}, Cijena: ${item['price']}, Ukupno: ${item['item_total']}")
     print(f"Ukupno: ${offer['sub_total']}, Porez: ${offer['tax']}, Ukupno za platiti: ${offer['total']}")
-
-def pitanje_za_opet(message):
-    odabir_opet = input(f"{message}")
-    if odabir_opet.lower != "da":
-        break
 
 
     
