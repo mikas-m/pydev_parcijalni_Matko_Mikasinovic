@@ -190,7 +190,7 @@ def display_offers(offers):
     # Omogućite izbor pregleda: sve ponude, po mjesecu ili pojedinačna ponuda
     # Prikaz relevantnih ponuda na temelju izbora
     
-    odabir = input(f"Želiš li vidjeti ponude po mjesecu (1), pojedinačnu ponudu (2) ili sve ponude? "
+    odabir = input(f"Želiš li vidjeti ponude po mjesecu (1), pojedinačnu ponudu (2) ili sve ponude (3)? "
     if odabir == '1':
         pass
     if odabir == '2':
@@ -203,7 +203,20 @@ def display_offers(offers):
             
     if odabir == '3':
         for offer in offers:
-            print(offer)
+            print(f"Ponuda broj -> {offer['offer_number']}\n"
+                  f"Kupac -> {offer['customer']}\n"
+                  f"Datum -> {offer['date']}\n"
+                  f"Broj stavki -> len{offer['item']}\n"
+                  f"Stavke:")
+
+            for item in offer:
+                print(f"ID proizvoda -> {item[product_id]}\n"
+                      f"Naziv proizvoda -> {item[product_name]}\n"
+                      f"Opis proizvoda -> {item[description]}\n"
+                      f"Cijena -> {item[price]}\n"
+                      f"Količina -> {item['quantity']}\n"
+                      f"Ukupna cijena -> {item['item_total']}\n"
+            
     
 
 
